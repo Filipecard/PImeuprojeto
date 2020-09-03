@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from .models import Enquete
 # Create your views here.
 
@@ -9,13 +9,9 @@ def bemvindo(request):
     return render(request,'bemvindo.html')
 
 def exibirEnquete(request,enquete_id):
-    enquete = Enquete()
-
-    if enquete_id == 1:
-        enquete = Enquete(enquete_id,'Você prefere suco de maracujá ou suco de uva ?','27/08/2020')
-    if enquete_id == 2:
-        enquete = Enquete(enquete_id,'Você tem preferencia por notebook ou computador de mesa?','20/08/2020')
-    if enquete_id == 3:
-        enquete = Enquete(enquete_id,'você prefere água com açucar ou chá para se acalmar?','23/08/2020') 
-
-    return render(request,'enquete.html',{'enquete':enquete})
+    try:
+        enquete = get_object_or_404(Enquete,pk = enquete_id)
+        return render(request,'enquete.html',{'enquete':enquete})
+    except:
+        enquete = Enquete('nula','não encontrado','0000-00-00')
+        return render(request,'enquete.html',{'enquete':enquete})
